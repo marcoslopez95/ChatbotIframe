@@ -4,7 +4,7 @@ import FloatComponent from '@/components/FloatComponent.vue'
 </script>
 
 <template>
-  <main>
+  <main style="z-index: 9999">
     <FloatComponent />
   </main>
 </template>

@@ -19,6 +19,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         entryFileNames: `chatbotIframe-pulpodin-v0.1.0.js`,
+        assetFileNames: `assets/chatbotIframe-pulpodin-[name]-v0.1.0.[ext]`,
       },
     },
   },
