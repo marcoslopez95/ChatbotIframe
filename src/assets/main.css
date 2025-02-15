@@ -1,3 +1,7 @@
+#chatbot-float{
+  z-index: 999;
+}
+
 :root{
   --background-color-messages-chatbot: #f6c700;
   --bg-container-chatbot: #717c51;
