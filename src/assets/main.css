@@ -1,35 +1,30 @@
-@import './base.css';
-
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
+:root{
+  --background-color-messages-chatbot: #f6c700;
+  --bg-container-chatbot: #717c51;
+  --text-messages-chatbot: white;
+}
+#chatbot-float {
+  --padding: 15px;
+  position: absolute;
+  bottom: var(--padding);
+  right: var(--padding);
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
+.bg-messages-chatbot{
+  background-color: var(--background-color-messages-chatbot);
 }
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
+.bg-container-chatbot{
+  background-color: var(--background-color-messages-chatbot)!important;
+}
+.text-messages-chatbot{
+  color: var(--text-messages-chatbot);
 }
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
+#icon {
+  transition: 1s all;
+}
 
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+.title-chatbot{
+  font-size: 20px;
 }
