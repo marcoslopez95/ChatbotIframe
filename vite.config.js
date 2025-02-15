@@ -15,5 +15,11 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
-
+  build: {
+    rollupOptions: {
+      output: {
+        entryFileNames: `chatbotIframe-pulpodin-v0.1.0.js`,
+      },
+    },
+  },
 })
