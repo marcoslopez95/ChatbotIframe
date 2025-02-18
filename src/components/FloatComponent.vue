@@ -29,13 +29,14 @@ const pushMessage = async() => {
     'type': 'user'
   })
   loading.value = true
+  messageInText.value = ''
   const res = await axios.post(`${url}/chatbots/${chatSelected.value.id}/chat`, data)
   const {content} = res.data
   messages.push({
     message: content,
     'type': 'bot'
   })
-  messageInText.value = ''
+
   loading.value = false
   setTimeout(()=>{
     const item = document.querySelector('#chatContainer div.v-virtual-scroll__item:last-child')
@@ -48,21 +49,26 @@ const listChats = reactive([])
 const getChatBots = async () => {
   const res = await axios.get(`${url}/chatbots/get`)
   const {data} = res
-  Array.from(data.data).forEach(({id, attributes}) => listChats.push({id, name:attributes.name}))
+  Array.from(data.data).forEach(({id, attributes, relationships}) => listChats.push({
+    id,
+    name:attributes.name,
+    img: relationships.image
+  }))
 }
 
 onMounted(() => {
   getChatBots()
 })
+const openMenu = ref(false)
 </script>
 
 <template>
   <div id="chatbot-float">
-    <VMenu :close-on-content-click="false">
+    <VMenu :close-on-content-click="false" :close-on-back="false" persistent @keydown.prevent.enter="(e) => e.preventDefault()">
       <template #activator="{ props: propsMenu }">
         <VHover>
           <template v-slot:default="{ isHovering, props }">
-            <VBtn icon color="transparent" :size="60" v-bind="propsMenu">
+            <VBtn icon color="transparent" :size="60" v-bind="propsMenu" @click="openMenu = true">
               <VIcon
                 id="icon"
                 v-bind="props"
@@ -86,7 +92,7 @@ onMounted(() => {
               <VContainer fluid>
                 <VRow>
                   <VCol cols="12">
-                    <MessageComponent class="ml-auto" @click="clickInChat(item)">{{ item.name }}</MessageComponent>
+                    <MessageComponent id="categoryChatBot" class="ml-auto" @click="clickInChat(item)">{{ item.name }}</MessageComponent>
                   </VCol>
                 </VRow>
               </VContainer>
@@ -107,7 +113,7 @@ onMounted(() => {
               <VContainer fluid>
                 <VRow>
                   <VCol cols="12" >
-                    <MessageComponent :class="item.type === 'bot' ? '': 'ml-auto'" >
+                    <MessageComponent :type="item.type" :img="chatSelected.img" >
                       {{item.message}}
                     </MessageComponent>
                   </VCol>
@@ -115,7 +121,7 @@ onMounted(() => {
               </VContainer>
             </template>
           </v-virtual-scroll>
-          <div class="mx-2 my-2">
+          <div class="px-2 py-3 bg-white">
             <VTextField
               variant="outlined"
               single-line
@@ -123,9 +129,11 @@ onMounted(() => {
               hide-details
               v-model="messageInText"
               :loading="loading"
+              :disabled="loading"
+              @keydown.enter.prevent.stop="pushMessage"
             >
               <template #append>
-                <VBtn :loading="loading" icon="mdi-send-variant" size="small" @click="pushMessage" />
+                <VBtn variant="flat" :loading="loading" icon="mdi-send-variant" size="small" @click="pushMessage" :disabled="loading"/>
               </template>
             </VTextField>
           </div>
@@ -135,4 +143,6 @@ onMounted(() => {
   </div>
 </template>
 
-<style></style>
+<style>
+
+</style>
