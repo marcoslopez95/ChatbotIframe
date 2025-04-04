@@ -116,8 +116,8 @@ const openMenu = ref(false)
               <VContainer fluid>
                 <VRow>
                   <VCol cols="12" >
-                    <MessageComponent :type="item.type" :img="chatSelected.img" >
-                      {{item.message}}
+                    <MessageComponent :type="item.type" :img="chatSelected.img">
+                      <span v-html="item.message" />
                     </MessageComponent>
                   </VCol>
                 </VRow>
