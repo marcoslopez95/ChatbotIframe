@@ -4,8 +4,8 @@ const emit = defineEmits(['click'])
 const props = defineProps(['type', 'img']);
 
 const getClassType = computed(() => ({
-  bot: 'bot-message-chatbot',
-  user: 'ml-auto user-message-chatbot'
+  bot: 'bot-message-chatbot text-start',
+  user: 'ml-auto user-message-chatbot text-end'
 })[props.type] ?? null)
 
 </script>
@@ -13,7 +13,7 @@ const getClassType = computed(() => ({
 <template>
   <div
     v-bind="$attrs"
-    class=" text-end border py-2 px-2 bg-messages-chatbot text-messages-chatbot"
+    class="border py-2 px-2 bg-messages-chatbot text-messages-chatbot"
     style="max-width: 220px"
     @click="emit('click')"
     :class="getClassType"

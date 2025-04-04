@@ -16,7 +16,7 @@
   --padding-chatbot-float: 15px;
 }
 #chatbot-float {
-  position: absolute;
+  position: fixed;
   bottom: var(--padding-chatbot-float);
   right: var(--padding-chatbot-float);
 }

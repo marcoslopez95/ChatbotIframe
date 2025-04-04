@@ -22,12 +22,17 @@ const clickInChat = (chat) => {
 
 const messageInText = ref('')
 const loading = ref(false)
+const scrollIntoLastItem = () => setTimeout(()=>{
+    const item = document.querySelector('#chatContainer div.v-virtual-scroll__item:last-child')
+    item.scrollIntoView({ behavior: 'smooth', block: 'end' })
+  },50)
 const pushMessage = async() => {
   const data = { message: messageInText.value}
   messages.push({
     'message': messageInText.value,
     'type': 'user'
   })
+  scrollIntoLastItem()
   loading.value = true
   messageInText.value = ''
   const res = await axios.post(`${url}/chatbots/${chatSelected.value.id}/chat`, data)
@@ -38,10 +43,8 @@ const pushMessage = async() => {
   })
 
   loading.value = false
-  setTimeout(()=>{
-    const item = document.querySelector('#chatContainer div.v-virtual-scroll__item:last-child')
-    item.scrollIntoView({ behavior: 'smooth', block: 'end' })
-  },10)
+  scrollIntoLastItem()
+  document.getElementById('inputChatbot').focus()
 
 }
 
@@ -82,12 +85,12 @@ const openMenu = ref(false)
       </template>
       <VCard class="bg-container-chatbot overflow-hidden" width="300" height="560" rounded="xl">
         <div v-show="!showChat" >
-          <div style="height: 50px" class="mb-4 d-flex pl-3 pt-5">
+          <div id="chatHeader" style="height: 50px" class="mb-4 d-flex pl-3 pt-5">
             <div class="text-center w-100">
               <span class="title-chatbot">Seleccione un chat</span>
             </div>
           </div>
-          <div style="overflow: auto; height: 500px">
+          <div id="chatCategories" style="overflow: auto; height: 500px">
             <div v-for="(item,i) in listChats" :key="i">
               <VContainer fluid>
                 <VRow>
@@ -100,11 +103,11 @@ const openMenu = ref(false)
           </div>
         </div>
         <div v-show="showChat">
-          <div style="height: 50px" class="mb-4 d-flex pl-3 pt-5">
-            <VBtn class="" @click="showChat = false" icon size="small">
+          <div id="chatHeader" style="height: 50px" class="mb-4 d-flex pl-3 pt-5">
+            <VBtn id="chatBtnTitle" class="" @click="showChat = false" icon size="small">
               <VIcon icon="mdi-chevron-left"></VIcon>
             </VBtn>
-            <div class="text-center w-100">
+            <div id="chatTitle" class="text-center w-100">
             <span class="title-chatbot">{{ chatSelected?.name ?? '' }}</span>
             </div>
           </div>
@@ -121,19 +124,21 @@ const openMenu = ref(false)
               </VContainer>
             </template>
           </v-virtual-scroll>
-          <div class="px-2 py-3 bg-white">
+          <div id="chatInputContainer" class=" px-2 py-3 bg-white">
             <VTextField
+              ref="fieldInput"
               variant="outlined"
               single-line
+              id="inputChatbot"
               density="compact"
               hide-details
               v-model="messageInText"
+              autofocus
               :loading="loading"
-              :disabled="loading"
               @keydown.enter.prevent.stop="pushMessage"
             >
               <template #append>
-                <VBtn variant="flat" :loading="loading" icon="mdi-send-variant" size="small" @click="pushMessage" :disabled="loading"/>
+                <VBtn  id="chatInputBtn" variant="flat" :loading="loading" icon="mdi-send-variant" size="small" @click="pushMessage" :disabled="loading"/>
               </template>
             </VTextField>
           </div>
